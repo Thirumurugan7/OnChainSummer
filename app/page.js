@@ -1,113 +1,168 @@
-import Image from 'next/image'
+"use client";
+import Image from "next/image";
+import React, { useState } from "react";
+
+import logo from "./logooncha.png";
+import hero from "./hero.png";
+import pic from "./pic.png";
+import footerPic from "./footericon.png";
+import "@rainbow-me/rainbowkit/styles.css";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import {
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  base,
+  zora,
+  polygonMumbai,
+} from "wagmi/chains";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
+
+const { chains, publicClient } = configureChains(
+  [mainnet, polygon, optimism, arbitrum, base, zora, polygonMumbai],
+  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: "nft",
+  projectId: "eec13610aaaff4b38eda673c101feed0",
+  chains,
+});
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+});
+
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function Home() {
+  const [mintedCount, setMintedCount] = useState(0);
+  const [nftPrice, setNftPrice] = useState(10);
+
+  const handleIncrement = () => {
+    setMintedCount((prevCount) => prevCount + 1);
+  };
+
+  const handleDecrement = () => {
+    if (mintedCount > 0) {
+      setMintedCount((prevCount) => prevCount - 1);
+    }
+  };
+
+  const handleMint = () => {
+    // Implement minting logic here
+    // You can add an API call or any other logic for minting
+    console.log("Minting NFTs...");
+  };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider chains={chains}>
+        <main className="flex min-h-screen flex-col bg-[#0570B7]  ">
+          <div className="flex flex-row items-center  mt-[64px]">
+            <div className="ml-[130px]">
+              <Image src={logo} alt="logo" />
+            </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+            <div className=" flex justify-end space-x-4 mr-[70px] items-center w-full  text-white">
+              <div>
+                <p className="text-xl font-normal">About</p>
+              </div>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+              <div>
+                <p className="text-xl font-normal">Marketplace</p>
+              </div>
+              <div>
+                <ConnectButton />
+              </div>
+            </div>
+          </div>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+          <div className="flex text-white mt-[20px] ">
+            <div className="w-[570px] ml-[110px] mt-[80px] font-bold font-sans ">
+              <div>
+                <h1 className="text-[100px] capitalize">ONCHAIN SUMMER</h1>
+                <p className="text-xl font-bold">
+                  Seize your Onchain Summer if you love memes, CCO and Summer.
+                  No Utility just Summer! Creating a community of the greatest
+                  memers in Web3.
+                </p>
+              </div>
+            </div>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+            <div className="ml-[160px]">
+              <Image src={hero} alt="hero" height={"600"} width={"500"} />
+            </div>
+          </div>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+          <div className="flex bg-white py-[90px] justify-around gap-x-[100px] items-center">
+            <div className="ml-[110px]">
+              <Image src={pic} />
+            </div>
+
+            <div className="flex flex-col items-center space-y-4 mr-[90px] pr-[50p]">
+              {/* Progress Bar */}
+              <div className="flex justify-between px-[5px] w-[400px] text-xl font-semibold">
+                <div>10% Minted</div>
+                <div>150/1500</div>
+              </div>
+              <div className="bg-[#FFDAE7] w-[400px] h-8 rounded-xl">
+                <div
+                  className="bg-[#FE1C6D] h-full rounded-xl "
+                  style={{ width: `${(mintedCount / 100) * 100}%` }}
+                />
+              </div>
+
+              {/* Increment/Decrement Counter */}
+              <div className="flex items-center space-x-4">
+                <button
+                  className="  border-none text-4xl"
+                  onClick={handleDecrement}
+                >
+                  -
+                </button>
+                <div className="bg-white px-9 py-3 rounded shadow-md text-4xl ">
+                  {mintedCount}
+                </div>
+                <button
+                  className=" border-none text-4xl"
+                  onClick={handleIncrement}
+                >
+                  +
+                </button>
+              </div>
+
+              {/* NFT Price */}
+              <div className=" rounded text-center text-xl font-normal uppercase">
+                {nftPrice} ETH
+              </div>
+
+              {/* Mint Button */}
+              <button
+                className="bg-[#FE1C6D] text-white px-28 py-4 rounded-2xl text-3xl uppercase font-semibold"
+                onClick={handleMint}
+              >
+                Mint
+              </button>
+            </div>
+          </div>
+
+          <div className="flex justify-center items-center space-x-2 my-3">
+            <div>
+              <Image src={footerPic} alt="footer" />
+            </div>
+            <div>
+              <span className="inline text-white text-xl font-extrabold ">
+                ONCHAIN SUMMER
+              </span>
+            </div>
+          </div>
+        </main>
+      </RainbowKitProvider>
+    </WagmiConfig>
+  );
 }
