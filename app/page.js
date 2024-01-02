@@ -120,13 +120,13 @@ export default function Home() {
               {/* Increment/Decrement Counter */}
               <div className="flex items-center space-x-4">
                 <div className="bg-white px-9 py-3 rounded shadow-md text-4xl ">
-                  {mintedCount}
+                  1
                 </div>
               </div>
 
               {/* NFT Price */}
               <div className=" rounded text-center text-xl font-normal uppercase">
-                {nftPrice} ETH
+                0.0069 ETH
               </div>
 
               {/* Mint Button */}
