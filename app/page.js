@@ -119,21 +119,9 @@ export default function Home() {
 
               {/* Increment/Decrement Counter */}
               <div className="flex items-center space-x-4">
-                <button
-                  className="  border-none text-4xl"
-                  onClick={handleDecrement}
-                >
-                  -
-                </button>
                 <div className="bg-white px-9 py-3 rounded shadow-md text-4xl ">
                   {mintedCount}
                 </div>
-                <button
-                  className=" border-none text-4xl"
-                  onClick={handleIncrement}
-                >
-                  +
-                </button>
               </div>
 
               {/* NFT Price */}
