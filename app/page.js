@@ -9,20 +9,12 @@ import footerPic from "./footericon.png";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import {
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  base,
-  zora,
-  polygonMumbai,
-} from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-
+import { minting } from "./config";
 const { chains, publicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, base, zora, polygonMumbai],
+  [sepolia],
   [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()]
 );
 
@@ -54,10 +46,12 @@ export default function Home() {
     }
   };
 
-  const handleMint = () => {
+  const handleMint = async () => {
     // Implement minting logic here
     // You can add an API call or any other logic for minting
     console.log("Minting NFTs...");
+
+    const res = await minting();
   };
   return (
     <WagmiConfig config={wagmiConfig}>
